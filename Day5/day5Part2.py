@@ -29,7 +29,6 @@ for line in input :
             supplies.append(stacks[whereItIs-1][i])
         for element in supplies : 
             stacks[whereItIs-1].remove(element)
-        supplies.reverse()
         stacks[whereToMove-1] = supplies + stacks[whereToMove-1]
         supplies.clear()
     countLine += 1
