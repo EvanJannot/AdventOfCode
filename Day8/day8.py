@@ -1,41 +1,23 @@
-input = open("Day8/input.txt","r")
-input = input.read().splitlines()
+input = open("Day8/input.txt","r").read().splitlines()
 
-nonVisibles = 0
-visibles = len(input)
+gridSize = len(input)-1
+visibles = len(input)*4 - 4
 
-for i in range (len(input)-1):
-    visibles += len(input[i])
-    for j in range (len(input[i])-1):
-        if i != 0 and i != len(input)-1 and j != 0 and j != len(input[i])-1:
+def column(matrix, i):
+    return [row[i] for row in matrix]
+
+for i in range (gridSize):
+    for j in range (gridSize):
+        if i != 0 and i != gridSize and j != 0 and j != len(input[i])-1:
             rowBefore = input[i][:j]
             rowAfter = input[i][j+1:]
-            colonneBefore = ''
-            colonneAfter = ''
-            hidingTrees = 0
-            for k in range(i):
-                colonneBefore += input[k][j]
-            for k in range(i+1,len(input)):
-                colonneAfter += input[k][j]
-
-            for tree in rowBefore:
-                if tree >= input[i][j] :
-                    hidingTrees += 1
-                    break
-            for tree in rowAfter:
-                if tree >= input[i][j] :
-                    hidingTrees += 1
-                    break
-            for tree in colonneBefore:
-                if tree >= input[i][j] :
-                    hidingTrees += 1
-                    break
-            for tree in colonneAfter:
-                if tree >= input[i][j] :
-                    hidingTrees += 1
-                    break
-            if hidingTrees == 4 : 
-                nonVisibles += 1
-
+            columnBefore = column(input,j)[0:i]
+            columnAfter = column(input,j)[i+1:gridSize+1]
+            visibleUp = all( tree < input[i][j] for tree in columnBefore)
+            visibleDown = all( tree < input[i][j] for tree in columnAfter)
+            visibleLeft = all( tree < input[i][j] for tree in rowBefore)
+            visibleRight = all( tree < input[i][j] for tree in rowAfter)
+            if visibleUp or visibleDown or visibleLeft or visibleRight :
+                visibles += 1
             
-print(visibles- nonVisibles)
+print(visibles)
